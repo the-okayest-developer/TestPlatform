@@ -1,0 +1,195 @@
+{
+  "Name": "AllDifferent",
+  "Questions": [
+    {
+      "QuestionText": "2+2",
+      "Answers": [
+        {
+          "Option": "A",
+          "Text": "1",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "B",
+          "Text": "2",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "C",
+          "Text": "3",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "D",
+          "Text": "4",
+          "IsCorrect": true,
+          "Order": 0,
+          "MatchingAnswer": null
+        }
+      ],
+      "QuestionType": 0
+    },
+    {
+      "QuestionText": "? > 0",
+      "Answers": [
+        {
+          "Option": "A",
+          "Text": "2",
+          "IsCorrect": true,
+          "Order": 0,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "B",
+          "Text": "3",
+          "IsCorrect": true,
+          "Order": 0,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "C",
+          "Text": "0",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "D",
+          "Text": "-1",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": null
+        }
+      ],
+      "QuestionType": 1
+    },
+    {
+      "QuestionText": "2 * 3",
+      "Answers": [
+        {
+          "Option": "A",
+          "Text": "6",
+          "IsCorrect": true,
+          "Order": 0,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "B",
+          "Text": "3*2",
+          "IsCorrect": true,
+          "Order": 0,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "C",
+          "Text": "36 ^ (1/2)",
+          "IsCorrect": true,
+          "Order": 0,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "D",
+          "Text": "23",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "E",
+          "Text": "0",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": null
+        }
+      ],
+      "QuestionType": 2
+    },
+    {
+      "QuestionText": "3*3",
+      "Answers": [
+        {
+          "Option": "\u0000",
+          "Text": "9",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": null
+        }
+      ],
+      "QuestionType": 3
+    },
+    {
+      "QuestionText": "Place from the smallest to  the biggest",
+      "Answers": [
+        {
+          "Option": "A",
+          "Text": "3^3",
+          "IsCorrect": false,
+          "Order": 4,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "B",
+          "Text": "3-3",
+          "IsCorrect": false,
+          "Order": 1,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "C",
+          "Text": "3+3",
+          "IsCorrect": false,
+          "Order": 2,
+          "MatchingAnswer": null
+        },
+        {
+          "Option": "D",
+          "Text": "3*3",
+          "IsCorrect": false,
+          "Order": 3,
+          "MatchingAnswer": null
+        }
+      ],
+      "QuestionType": 4
+    },
+    {
+      "QuestionText": "Match",
+      "Answers": [
+        {
+          "Option": "A",
+          "Text": "2",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": "1+1"
+        },
+        {
+          "Option": "B",
+          "Text": "3",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": "2+1"
+        },
+        {
+          "Option": "C",
+          "Text": "4",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": "2+2"
+        },
+        {
+          "Option": "D",
+          "Text": "5",
+          "IsCorrect": false,
+          "Order": 0,
+          "MatchingAnswer": "2+3"
+        }
+      ],
+      "QuestionType": 5
+    }
+  ]
+}

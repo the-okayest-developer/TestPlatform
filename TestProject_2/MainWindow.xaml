@@ -1,0 +1,18 @@
+﻿<Window x:Class="TestProject_2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TestProject_2"
+        mc:Ignorable="d"
+        Title="Testing Platform" Height="122" Width="300">
+    <Grid Margin="0,0,0,-6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button Content="Login as Teacher" HorizontalAlignment="Center" VerticalAlignment="Center" Click="teacherLoginButton_Click" Height="20" Width="110"/>
+        <Button Content="Login as Student" HorizontalAlignment="Center" VerticalAlignment="Center" Click="studentLoginButton_Click" Grid.Column="1" Height="20" Width="110"/>
+
+    </Grid>
+</Window>
