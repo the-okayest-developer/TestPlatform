@@ -5,14 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestProject_2"
         mc:Ignorable="d"
-        Title="Testing Platform" Height="122" Width="300">
+        Title="Testing Platform" Height="270" Width="555">
     <Grid Margin="0,0,0,-6">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="50*"/>
+            <ColumnDefinition Width="53*"/>
         </Grid.ColumnDefinitions>
-        <Button Content="Login as Teacher" HorizontalAlignment="Center" VerticalAlignment="Center" Click="teacherLoginButton_Click" Height="20" Width="110"/>
-        <Button Content="Login as Student" HorizontalAlignment="Center" VerticalAlignment="Center" Click="studentLoginButton_Click" Grid.Column="1" Height="20" Width="110"/>
+        <Button Content="Login as Teacher" HorizontalAlignment="Center" VerticalAlignment="Center" Click="teacherLoginButton_Click" Height="50" Width="150" Grid.Row="1" FontSize="18"/>
+        <Button Content="Login as Student" HorizontalAlignment="Center" VerticalAlignment="Center" Click="studentLoginButton_Click" Height="50" Width="150" Grid.Row="1" Grid.Column="1" FontSize="18"/>
+        <Label Content="Testing Platform" HorizontalAlignment="Center" VerticalAlignment="Center" Width="182" FontSize="24" Height="48" Grid.ColumnSpan="2" Margin="0,0,0,0"/>
 
     </Grid>
 </Window>

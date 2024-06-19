@@ -81,7 +81,7 @@ namespace TestProject_2.windows
             }
             catch (Exception ex) 
             {
-                MessageBox.Show($"Error evaluating test results: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Error evaluating test results: {ex.Message}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             

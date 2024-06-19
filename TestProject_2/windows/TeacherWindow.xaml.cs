@@ -50,10 +50,22 @@ namespace TestProject_2.windows
         private void saveTestButton_Click(object sender, RoutedEventArgs e)
         {
             Test test = new Test(testNameTextBox.Text);
-            foreach (var questionBox in testQuestionsPanel.Children.OfType<GroupBox>())
+            try
             {
-                Question question = questionCreators[questionBoxes[questionBox]].CreateQuestionFromUiEntry(questionBox);
-                test.AddQuestion(question);
+                foreach (var questionBox in testQuestionsPanel.Children.OfType<GroupBox>())
+                {
+                    Question question = questionCreators[questionBoxes[questionBox]].CreateQuestionFromUiEntry(questionBox);
+                    test.AddQuestion(question);
+                }
+                if (test.Questions.Count == 0)
+                {
+                    throw new ArgumentException("Can not save test with no questions");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving test: {ex.Message}", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
             }
 
             string json = JsonConvert.SerializeObject(test, Newtonsoft.Json.Formatting.Indented);

@@ -130,6 +130,14 @@ namespace TestProject_2.model
             return (char)('A' + optionCount);
         }
 
+        protected virtual void checkAnswers(Question question, int minAnswers, string questionName)
+        {
+            if (question.GetAnswers() == null || question.GetAnswers().Count < minAnswers)
+            {
+                throw new ArgumentException($"{questionName} has less than {minAnswers} answers.");
+            }
+        }
+
     }
 
     public class SingleChoiceQuestionCreator : QuestionUiCreator
@@ -147,12 +155,33 @@ namespace TestProject_2.model
             };
             TextBox txtOption = new TextBox { Width = 430, Text = answer == null ? "" : answer.Text};
 
+            Button deleteButton = new Button
+            {
+                Content = "X",
+                FontSize = 8,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 15,
+                Height = 15,
+                Margin = new Thickness(0, 0, -15, 0),
+            };
+            deleteButton.Click += (s, e) =>
+            {
+                questionPanel.Children.Remove(answerPanel);
+                RenumberOptions(questionPanel);
+            };
+
+            answerPanel.Children.Add(deleteButton);
+            DockPanel.SetDock(deleteButton, Dock.Right);
             answerPanel.Children.Add(radioButton);
             DockPanel.SetDock(radioButton, Dock.Left);
             answerPanel.Children.Add(txtOption);
             DockPanel.SetDock(txtOption, Dock.Right);
 
+
             questionPanel.Children.Add(answerPanel);
+
+
         }
         
         public override void AddNonEditableAnswerOption(StackPanel questionPanel, Answer? answer)
@@ -181,6 +210,11 @@ namespace TestProject_2.model
             var txtQuestion = stackPanel.Children.OfType<TextBox>().FirstOrDefault();
             var questionText = txtQuestion?.Text;
 
+            if (string.IsNullOrEmpty(questionText))
+            {
+                throw new ArgumentException($"Please check question text for {groupBox.Header}. It can not be empty");
+            }
+
             var question = new SingleChoiceQuestion(questionText);
             foreach (var dockPanel in stackPanel.Children.OfType<DockPanel>())
             {
@@ -190,13 +224,40 @@ namespace TestProject_2.model
                 if (radioButton != null && txtOption != null)
                 {
                     var option = txtOption.Text;
+                    if (string.IsNullOrEmpty(option))
+                    {
+                        throw new ArgumentException($"Please check answers for {groupBox.Header}. Answers can not be empty");
+                    }
                     question.AddAnswer(new Answer(radioButton.Content.ToString()[0], option, radioButton.IsChecked == true));
                 }
+            }
+            checkAnswers(question, 2, groupBox.Header.ToString());
+
+            var correctAnswers = question.Answers.Select(a => a.IsCorrect).Where(correct => correct).ToList().Count();
+            if (correctAnswers != 1)
+            {
+                throw new ArgumentException($"Please check answers for {groupBox.Header}. There should be 1 correct answer.");
             }
 
             return question;
         }
 
+        private void RenumberOptions(StackPanel questionPanel)
+        {
+            char optionChar = 'A';
+            foreach (DockPanel answerPanel in questionPanel.Children.OfType<DockPanel>())
+            {
+                foreach (var child in answerPanel.Children)
+                {
+                    if (child is RadioButton button)
+                    {
+                        button.Content = optionChar.ToString();
+                        optionChar++;
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public class MultipleChoiceQuestionCreator : QuestionUiCreator
@@ -215,6 +276,25 @@ namespace TestProject_2.model
             };
 
             TextBox txtOption = new TextBox { Width = 430, Text = answer == null ? "" : answer.Text };
+
+            Button deleteButton = new Button
+            {
+                Content = "X",
+                FontSize = 8,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 15,
+                Height = 15,
+                Margin = new Thickness(0, 0, -15, 0),
+            };
+            deleteButton.Click += (s, e) =>
+            {
+                questionPanel.Children.Remove(answerPanel);
+                RenumberOptions(questionPanel);
+            };
+
+            answerPanel.Children.Add(deleteButton);
+            DockPanel.SetDock(deleteButton, Dock.Right);
 
             answerPanel.Children.Add(checkBox);
             DockPanel.SetDock(checkBox, Dock.Left);
@@ -251,6 +331,11 @@ namespace TestProject_2.model
             var txtQuestion = stackPanel.Children.OfType<TextBox>().FirstOrDefault();
             var questionText = txtQuestion?.Text;
 
+            if (string.IsNullOrEmpty(questionText))
+            {
+                throw new ArgumentException($"Please check question text for {groupBox.Header}. It can not be empty");
+            }
+
             var question = new MultipleChoiceQuestion(questionText);
             foreach (var dockPanel in stackPanel.Children.OfType<DockPanel>())
             {
@@ -260,11 +345,39 @@ namespace TestProject_2.model
                 if (checkBox != null && txtOption != null)
                 {
                     var option = txtOption.Text;
+                    if (string.IsNullOrEmpty(option))
+                    {
+                        throw new ArgumentException($"Please check answers for {groupBox.Header}. Answers can not be empty");
+                    }
                     question.AddAnswer(new Answer(checkBox.Content.ToString()[0], option, checkBox.IsChecked == true));
                 }
             }
+            checkAnswers(question, 2, groupBox.Header.ToString());
+
+            var correctAnswers = question.Answers.Select(a => a.IsCorrect).Where(correct => correct).ToList().Count();
+            if (correctAnswers == 0)
+            {
+                throw new ArgumentException($"Please check answers for {groupBox.Header}. There should be at least 1 correct answer.");
+            }
 
             return question;
+        }
+
+        private void RenumberOptions(StackPanel questionPanel)
+        {
+            char optionChar = 'A';
+            foreach (DockPanel answerPanel in questionPanel.Children.OfType<DockPanel>())
+            {
+                foreach (var child in answerPanel.Children)
+                {
+                    if (child is CheckBox checkBox)
+                    {
+                        checkBox.Content = optionChar.ToString();
+                        optionChar++;
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -285,6 +398,25 @@ namespace TestProject_2.model
 
             TextBox txtOption = new TextBox { Width = 430, Text = answer == null ? "" : answer.Text };
 
+            Button deleteButton = new Button
+            {
+                Content = "X",
+                FontSize = 8,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 15,
+                Height = 15,
+                Margin = new Thickness(0, 0, -15, 0)
+            };
+            deleteButton.Click += (s, e) =>
+            {
+                questionPanel.Children.Remove(answerPanel);
+                RenumberOptions(questionPanel);
+            };
+
+            answerPanel.Children.Add(deleteButton);
+            DockPanel.SetDock(deleteButton, Dock.Right);
+
             answerPanel.Children.Add(checkBox);
             DockPanel.SetDock(checkBox, Dock.Left);
             answerPanel.Children.Add(txtOption);
@@ -320,6 +452,11 @@ namespace TestProject_2.model
             var txtQuestion = stackPanel.Children.OfType<TextBox>().FirstOrDefault();
             var questionText = txtQuestion?.Text;
 
+            if (string.IsNullOrEmpty(questionText))
+            {
+                throw new ArgumentException($"Please check question text for {groupBox.Header}. It can not be empty");
+            }
+
             var question = new HalfCorrectChoiceQuestion(questionText);
             foreach (var dockPanel in stackPanel.Children.OfType<DockPanel>())
             {
@@ -329,11 +466,40 @@ namespace TestProject_2.model
                 if (checkBox != null && txtOption != null)
                 {
                     var option = txtOption.Text;
+                    if (string.IsNullOrEmpty(option))
+                    {
+                        throw new ArgumentException($"Please check answers for {groupBox.Header}. Answers can not be empty");
+                    }
+
                     question.AddAnswer(new Answer(checkBox.Content.ToString()[0], option, checkBox.IsChecked == true));
                 }
             }
+            checkAnswers(question, 2, groupBox.Header.ToString());
+
+            var correctAnswers = question.Answers.Select(a => a.IsCorrect).Where(correct => correct).ToList().Count();
+            if (correctAnswers == 0)
+            {
+                throw new ArgumentException($"Please check answers for {groupBox.Header}. There should be at least 1 correct answer.");
+            }
 
             return question;
+        }
+
+        private void RenumberOptions(StackPanel questionPanel)
+        {
+            char optionChar = 'A';
+            foreach (DockPanel answerPanel in questionPanel.Children.OfType<DockPanel>())
+            {
+                foreach (var child in answerPanel.Children)
+                {
+                    if (child is CheckBox checkBox)
+                    {
+                        checkBox.Content = optionChar.ToString();
+                        optionChar++;
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -370,13 +536,25 @@ namespace TestProject_2.model
             var txtQuestion = stackPanel.Children.OfType<TextBox>().FirstOrDefault();
             var questionText = txtQuestion?.Text;
 
+            if (string.IsNullOrEmpty(questionText))
+            {
+                throw new ArgumentException($"Please check question text for {groupBox.Header}. It can not be empty");
+            }
+
             var question = new OpenEndedQuestion(questionText);
 
             var answerTextBox = stackPanel.Children.OfType<TextBox>().Skip(1).FirstOrDefault();
             if (answerTextBox != null)
             {
-                question.AddAnswer(new Answer(answerTextBox.Text.Trim().ToLower()));
+                string answer = answerTextBox.Text.Trim().ToLower();
+                if (string.IsNullOrEmpty(answer))
+                {
+                    throw new ArgumentException($"Please check answers for {groupBox.Header}. Answer can not be empty");
+                }
+
+                question.AddAnswer(new Answer(answer));
             }
+            checkAnswers(question, 1, groupBox.Header.ToString());
 
             return question;
         }
@@ -413,7 +591,7 @@ namespace TestProject_2.model
                 Tag = "Answer"
             };
 
-            TextBox orderTextBox = new TextBox
+            NumericTextBox orderTextBox = new NumericTextBox
             {
                 Width = 30,
                 Text = answer == null ? "" : answer.Order.ToString(),
@@ -421,6 +599,25 @@ namespace TestProject_2.model
                 VerticalAlignment = VerticalAlignment.Center,
                 Tag = "Order"
             };
+
+            Button deleteButton = new Button
+            {
+                Content = "X",
+                FontSize = 8,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 15,
+                Height = 15,
+                Margin = new Thickness(0, 0, -15, 0)
+            };
+            deleteButton.Click += (s, e) =>
+            {
+                questionPanel.Children.Remove(answerPanel);
+                RenumberOptions(questionPanel);
+            };
+
+            answerPanel.Children.Add(deleteButton);
+            DockPanel.SetDock(deleteButton, Dock.Right);
 
             answerPanel.Children.Add(optionLabel);
             DockPanel.SetDock(optionLabel, Dock.Left);
@@ -456,7 +653,7 @@ namespace TestProject_2.model
                 Tag = "Answer"
             };
 
-            TextBox orderTextBox = new TextBox
+            NumericTextBox orderTextBox = new NumericTextBox
             {
                 Width = 30,
                 Margin = new Thickness(7, 2, 5, 0),
@@ -483,6 +680,11 @@ namespace TestProject_2.model
             var txtQuestion = stackPanel.Children.OfType<TextBox>().FirstOrDefault();
             var questionText = txtQuestion?.Text;
 
+            if (string.IsNullOrEmpty(questionText))
+            {
+                throw new ArgumentException($"Please check question text for {groupBox.Header}. It can not be empty");
+            }
+
             var question = new ChronologyQuestion(questionText);
             foreach (var dockPanel in stackPanel.Children.OfType<DockPanel>())
             {
@@ -496,14 +698,39 @@ namespace TestProject_2.model
 
                 if (orderTextBox != null && answerTextBox != null)
                 {
-                    var order = int.Parse(orderTextBox.Text);
                     char option = optionLabel.Content.ToString()[0];
                     var answerText = answerTextBox.Text;
+
+                    if (string.IsNullOrEmpty(orderTextBox.Text) || string.IsNullOrEmpty(answerText))
+                    {
+                        throw new ArgumentException($"Please check answers for {groupBox.Header}. Answer can not be empty");
+                    }
+                    var order = int.Parse(orderTextBox.Text);
+
                     question.AddAnswer(new Answer(option, answerText, order));
                 }
             }
+            checkAnswers(question, 2, groupBox.Header.ToString());
 
             return question;
+        }
+
+
+        private void RenumberOptions(StackPanel questionPanel)
+        {
+            char optionChar = 'A';
+            foreach (DockPanel answerPanel in questionPanel.Children.OfType<DockPanel>())
+            {
+                foreach (var child in answerPanel.Children)
+                {
+                    if (child is Label label)
+                    {
+                        label.Content = optionChar.ToString();
+                        optionChar++;
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -576,8 +803,27 @@ namespace TestProject_2.model
             DockPanel.SetDock(optionMatchingLabel, Dock.Left);
             DockPanel.SetDock(answerMatchingTextBox, Dock.Right);
 
+
             answerPanel.Children.Add(leftPanel);
             answerPanel.Children.Add(rightPanel);
+
+            Button deleteButton = new Button
+            {
+                Content = "X",
+                FontSize = 8,
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Center,
+                Width = 15,
+                Height = 15,
+                Margin = new Thickness(0, -8, -28, 0)
+            };
+            deleteButton.Click += (s, e) =>
+            {
+                questionPanel.Children.Remove(answerPanel);
+                RenumberOptions(questionPanel);
+            };
+
+            answerPanel.Children.Add(deleteButton);
 
             questionPanel.Children.Add(answerPanel);
         }
@@ -640,6 +886,11 @@ namespace TestProject_2.model
 
             var question = new MatchingQuestion(txtQuestion?.Text);
 
+            if (string.IsNullOrEmpty(txtQuestion?.Text))
+            {
+                throw new ArgumentException($"Please check question text for {groupBox.Header}. It can not be empty");
+            }
+
             foreach (var answerPanel in stackPanel.Children.OfType<StackPanel>())
             {
                 var leftPanel = answerPanel.Children.OfType<DockPanel>()
@@ -655,10 +906,38 @@ namespace TestProject_2.model
 
                 char option = optionLabel.Content.ToString()[0];
                 var answerText = answerTextBox.Text;
+
+                if (string.IsNullOrEmpty(matchingAnswerBox.Text) || string.IsNullOrEmpty(answerText))
+                {
+                    throw new ArgumentException($"Please check answers for {groupBox.Header}. Answer can not be empty");
+                }
                 question.AddAnswer(new Answer(option, answerText, matchingAnswerBox.Text));
             }
+            checkAnswers(question, 2, groupBox.Header.ToString());
 
             return question;
+        }
+
+
+        private void RenumberOptions(StackPanel questionPanel)
+        {
+            char optionChar = 'A';
+            foreach (var answerPanel in questionPanel.Children.OfType<StackPanel>())
+            {
+                foreach (DockPanel dockPanel in answerPanel.Children.OfType<DockPanel>())
+                {
+                    foreach (var child in dockPanel.Children)
+                    {
+                        if (child is Label label)
+                        {
+                            label.Content = optionChar.ToString();
+                            break;
+                        }
+                    }
+                }
+                optionChar++;
+
+            }
         }
     }
 }
